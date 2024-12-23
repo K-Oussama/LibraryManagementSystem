@@ -1,0 +1,220 @@
+:root {
+    --table-bg: #ffffff;
+    --table-header-bg: #3498db;
+    --table-stripe: #f8f9fa;
+    --text-primary: #2c3e50;
+    --text-secondary: #7f8c8d;
+    --border-color: #e0e0e0;
+    --success-color: #2ecc71;
+    --info-color: #3498db;
+    --danger-color: #e74c3c;
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  [data-theme="dark"] {
+    --table-bg: #2d2d2d;
+    --table-header-bg: #1a1a1a;
+    --table-stripe: #333333;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --border-color: #404040;
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .books-container {
+    padding: 2rem;
+    transition: all 0.3s ease;
+  }
+  
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    animation: slideDown 0.5s ease-out;
+  }
+  
+  .header-section h2 {
+    color: var(--text-primary);
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  .search-section {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    animation: slideDown 0.5s ease-out 0.2s backwards;
+  }
+  
+  .search-input {
+    flex: 1;
+    max-width: 300px;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--table-bg);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--table-header-bg);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  }
+  
+  .table-container {
+    background: var(--table-bg);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    animation: slideUp 0.5s ease-out 0.4s backwards;
+  }
+  
+  .books-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: var(--text-primary);
+  }
+  
+  .books-table th {
+    background-color: var(--table-header-bg);
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 500;
+  }
+  
+  .books-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+  }
+  
+  .books-table tbody tr {
+    background-color: var(--table-bg);
+    transition: all 0.3s ease;
+  }
+  
+  .books-table tbody tr:nth-child(even) {
+    background-color: var(--table-stripe);
+  }
+  
+  .books-table tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+  }
+  
+  .books-table tr:hover .action-buttons {
+    opacity: 1;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .btn i {
+    font-size: 0.9rem;
+  }
+  
+  .btn-success {
+    background-color: var(--success-color);
+  }
+  
+  .btn-info {
+    background-color: var(--info-color);
+  }
+  
+ /* .btn-danger {
+ /*   background-color: var(--danger-color);
+ /* }
+ */
+  .btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+  
+  .no-books {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  /* Animations */
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 1024px) {
+    .books-container {
+      padding: 1rem;
+    }
+    
+    .action-buttons {
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    .books-table {
+      min-width: 800px;
+    }
+    
+    .search-section {
+      flex-direction: column;
+    }
+    
+    .search-input {
+      max-width: 100%;
+    }
+  }

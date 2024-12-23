@@ -1,0 +1,67 @@
+<div class="login-container" [attr.data-theme]="isDarkMode ? 'dark' : 'light'">
+  <button class="theme-toggle" (click)="toggleTheme()">
+    <i class="fas" [class.fa-moon]="!isDarkMode" [class.fa-sun]="isDarkMode"></i>
+  </button>
+  
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Library Management System</h1>
+      <p>Please sign in to continue</p>
+    </div>
+    
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" novalidate>
+      <div class="form-group">
+        <label for="loginUsername" class="form-label">Username</label>
+        <input 
+          type="text" 
+          id="loginUsername"
+          name="username"
+          #username="ngModel"
+          [(ngModel)]="loginData.username"
+          class="form-control" 
+          required
+          minlength="3"
+          placeholder="Enter your username">
+        <div *ngIf="username.invalid && (username.dirty || username.touched)" class="error-message">
+          <div *ngIf="username.errors?.['required']">Username is required</div>
+          <div *ngIf="username.errors?.['minlength']">Username must be at least 3 characters</div>
+        </div>
+        <div class="form-text">Username provided by the library admin</div>
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword" class="form-label">Password</label>
+        <div class="password-input">
+          <input 
+            [type]="showPassword ? 'text' : 'password'"
+            id="loginPassword"
+            name="password"
+            #password="ngModel"
+            [(ngModel)]="loginData.password"
+            class="form-control" 
+            required
+            minlength="4"
+            placeholder="Enter your password">
+          <button 
+            type="button" 
+            class="password-toggle"
+            (click)="togglePassword()">
+            <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+          </button>
+        </div>
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="error-message">
+          <div *ngIf="password.errors?.['required']">Password is required</div>
+          <div *ngIf="password.errors?.['minlength']">Password must be at least 4 characters</div>
+        </div>
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn-login"
+        [disabled]="loginForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Sign In</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,119 @@
+<div class="books-container" [attr.data-theme]="isDarkMode ? 'dark' : 'light'">
+    <div class="header-section">
+      <h2>
+        <i class="fas fa-books me-2"></i>
+        Book Collection
+      </h2>
+      <button class="btn btn-success" routerLink="/create-book">
+        <i class="fas fa-plus"></i>
+        Add New Book
+      </button>
+    </div>
+  
+    <div class="search-section">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search books..."
+        [(ngModel)]="searchTerm"
+        (input)="filterBooks()"
+      >
+      <select 
+        class="search-input" 
+        [(ngModel)]="selectedGenre"
+        (change)="filterBooks()">
+        <option value="">All Genres</option>
+        <option *ngFor="let genre of uniqueGenres" [value]="genre">{{genre}}</option>
+      </select>
+    </div>
+  
+    <div class="table-container">
+      <div *ngIf="isLoading" class="loading-spinner">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+      </div>
+  
+      <div *ngIf="!isLoading && filteredBooks.length === 0" class="no-books">
+        <i class="fas fa-book-open fa-3x mb-3"></i>
+        <p>No books found matching your criteria</p>
+      </div>
+  
+      <table *ngIf="!isLoading && filteredBooks.length > 0" class="books-table">
+        <thead>
+          <tr>
+            <th (click)="sort('bookId')">
+              ID 
+              <i class="fas" [ngClass]="getSortIcon('bookId')"></i>
+            </th>
+            <th (click)="sort('bookName')">
+              Name
+              <i class="fas" [ngClass]="getSortIcon('bookName')"></i>
+            </th>
+            <th (click)="sort('bookAuthor')">
+              Author
+              <i class="fas" [ngClass]="getSortIcon('bookAuthor')"></i>
+            </th>
+            <th (click)="sort('bookGenre')">
+              Genre
+              <i class="fas" [ngClass]="getSortIcon('bookGenre')"></i>
+            </th>
+            <th (click)="sort('noOfCopies')">
+              Available Copies
+              <i class="fas" [ngClass]="getSortIcon('noOfCopies')"></i>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let book of filteredBooks">
+            <td>{{book.bookId}}</td>
+            <td>{{book.bookName}}</td>
+            <td>{{book.bookAuthor}}</td>
+            <td>
+              <span class="badge" [ngStyle]="getGenreColor(book.bookGenre)">
+                {{book.bookGenre}}
+              </span>
+            </td>
+            <td>
+              <span [ngClass]="getCopiesClass(book.noOfCopies)">
+                {{book.noOfCopies}}
+              </span>
+            </td>
+            <td>
+                <div class="action-buttons">
+                  <button (click)="bookDetails(book.bookId)" class="btn btn-success">
+                    <i class="fas fa-eye"></i>
+                    View
+                  </button>
+                  <button (click)="updateBook(book.bookId)" class="btn btn-info">
+                    <i class="fas fa-edit"></i>
+                    Edit
+                  </button>
+                  <button (click)="confirmDelete(book)" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i class="fas fa-trash"></i>
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="bookToDelete">
+          Are you sure you want to delete "{{bookToDelete.bookName}}"?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDeleteBook()" data-bs-dismiss="modal">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,87 @@
+<header [attr.data-theme]="isDarkMode ? 'dark' : 'light'">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <i class="fas fa-book-reader me-2"></i>
+        Library Management System
+      </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarSupportedContent" 
+              aria-controls="navbarSupportedContent" 
+              aria-expanded="false" 
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <!-- Admin Menu Items -->
+          <ng-container *ngIf="userService.roleMatch(['Admin'])">
+            <li class="nav-item">
+              <a routerLink="/books" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-books me-2"></i>Book List
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/create-book" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-plus-circle me-2"></i>Add Book
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/users" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-users me-2"></i>User List
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/register-user" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-user-plus me-2"></i>Register User
+              </a>
+            </li>
+          </ng-container>
+
+          <!-- User Menu Items -->
+          <ng-container *ngIf="userService.roleMatch(['User'])">
+            <li class="nav-item">
+              <a routerLink="/borrow-book" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-hand-holding-book me-2"></i>Borrow Books
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/return-book" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-undo me-2"></i>Return Books
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+
+        <div class="d-flex align-items-center">
+          <!-- Theme Toggle -->
+          <button class="btn btn-link nav-link" (click)="toggleTheme()">
+            <i class="fas" [class.fa-moon]="!isDarkMode" [class.fa-sun]="isDarkMode"></i>
+          </button>
+
+          <!-- User Greeting -->
+          <div class="user-greeting" *ngIf="isLoggedIn()">
+            <i class="fas fa-user-circle"></i>
+            <strong>{{name}}</strong>
+          </div>
+
+          <!-- Auth Buttons -->
+          <div class="auth-buttons">
+            <button *ngIf="!isLoggedIn()" type="button" class="btn btn-success" routerLink="/login">
+              <i class="fas fa-sign-in-alt me-2"></i>Login
+            </button>
+            <button *ngIf="isLoggedIn()" type="button" class="btn btn-danger" (click)="logout()">
+              <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
