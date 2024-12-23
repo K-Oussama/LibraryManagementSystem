@@ -1,0 +1,62 @@
+name: CI/CD with SonarCloud
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-and-analyze:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: lms
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Cache SonarCloud and Maven
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.sonar/cache
+            ~/.m2
+          key: ${{ runner.os }}-sonar-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-sonar-maven-
+      - name: Build, Test and Analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          cd lms-backend
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          -Dsonar.projectKey=emsi-5iir_library-management-system \
+          -Dsonar.organization=emsi-5iir \
+          -Dtest='!**/selenium/**,!**/performance/**' \
+          -Dspring.datasource.url=jdbc:mysql://localhost:3306/lms \
+          -Dspring.datasource.username=root \
+          -Dspring.datasource.password=root
+      - name: Build Frontend
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: |
+          cd lms-frontend
+          npm install
+          npm run build
